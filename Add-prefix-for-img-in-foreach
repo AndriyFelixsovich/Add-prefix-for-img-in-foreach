@@ -1,0 +1,28 @@
+$directory = 'D:\foto_category\model-moto';
+
+        function addPrefixToImages($dir, $prefix) {
+            $files = scandir($dir);
+
+            foreach ($files as $file) {
+                // Пропускаємо "." і ".."
+                if ($file === '.' || $file === '..') {
+                    continue;
+                }
+
+                $filePath = $dir . DIRECTORY_SEPARATOR . $file;
+
+                if (is_dir($filePath)) {
+                    // Рекурсивно викликаємо функцію для підкаталогів
+                    addPrefixToImages($filePath, $prefix);
+                } else {
+                    // Додаємо префікс до файлів з розширеннями .jpg та .png
+                    if (preg_match('/\.(jpg|png)$/i', $file)) {
+                        $newFileName = $dir . DIRECTORY_SEPARATOR . $prefix . $file;
+                        rename($filePath, $newFileName);
+                    }
+                }
+            }
+        }
+
+        addPrefixToImages($directory, 'staravto_');
+    }
